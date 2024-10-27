@@ -9,7 +9,7 @@ use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
 
 /**
- * @implements ResponseContract<array{type: string}>
+ * @implements ResponseContract<array{type: string, file_search: array{max_num_results: int, ranking_options: array{ranker: string, score_threshold: float}}>
  */
 final class AssistantResponseToolFileSearch implements ResponseContract
 {
@@ -22,17 +22,20 @@ final class AssistantResponseToolFileSearch implements ResponseContract
 
     private function __construct(
         public string $type,
-    ) {}
+        public AssistantResponseToolFileSearchFileSearch $file_search,
+    ) {
+    }
 
     /**
      * Acts as static factory, and returns a new Response instance.
      *
-     * @param  array{type: 'file_search'}  $attributes
+     * @param array{type: 'file_search', file_search: array{max_num_results: int, ranking_options: array{ranker: string, score_threshold: float}} $attributes
      */
     public static function from(array $attributes): self
     {
         return new self(
             $attributes['type'],
+            AssistantResponseToolFileSearchFileSearch::from($attributes['file_search']),
         );
     }
 
@@ -43,6 +46,7 @@ final class AssistantResponseToolFileSearch implements ResponseContract
     {
         return [
             'type' => $this->type,
+            'file_search' => $this->file_search->toArray(),
         ];
     }
 }
