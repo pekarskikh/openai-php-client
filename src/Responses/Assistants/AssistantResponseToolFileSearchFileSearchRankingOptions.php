@@ -9,19 +9,19 @@ use OpenAI\Responses\Concerns\ArrayAccessible;
 use OpenAI\Testing\Responses\Concerns\Fakeable;
 
 /**
- * @implements ResponseContract<array{ranker: string, score_threshold: float}>
+ * @implements ResponseContract<array{ranker: null|string, score_threshold: float}>
  */
 final class AssistantResponseToolFileSearchFileSearchRankingOptions implements ResponseContract
 {
     /**
-     * @use ArrayAccessible<array{ranker: string, score_threshold: float}>
+     * @use ArrayAccessible<array{ranker: null|string, score_threshold: float}>
      */
     use ArrayAccessible;
 
     use Fakeable;
 
     private function __construct(
-        public string $ranker,
+        public ?string $ranker,
         public float $score_threshold,
     )
     {
@@ -35,7 +35,7 @@ final class AssistantResponseToolFileSearchFileSearchRankingOptions implements R
     public static function from(array $attributes): self
     {
         return new self(
-            $attributes['ranker'],
+            $attributes['ranker'] ?? null,
             $attributes['score_threshold'],
         );
     }
